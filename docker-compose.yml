@@ -5,7 +5,7 @@ services:
     image: wordpress:php8.3-fpm-alpine
     restart: unless-stopped
     environment:
-      - WORDPRESS_DB_HOST=wordpress
+      - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=wordpress
       - WORDPRESS_DB_PASSWORD=wordpress
       - WORDPRESS_DB_NAME=wordpress
