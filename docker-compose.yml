@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    image: wordpress:php8.3-fpm-alpine
+    image: wordpress:php8.3-apache
     restart: unless-stopped
     environment:
       - WORDPRESS_DB_HOST=db
@@ -13,24 +13,12 @@ services:
       - app_data:/var/www/html
     networks:
       app_db:
-      app_web:
+      proxy_apps:
     depends_on:
       - db
 
-  web:
-    image: nginx:1-alpine
-    restart: unless-stopped
-    volumes:
-      - app_data:/var/www/html
-      - $PWD/build/nginx.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      app_web:
-      proxy_apps:
-    depends_on:
-      - app
-
   db:
-    image: mysql:8.3
+    image: percona/percona-server:8.3
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=wordpress
@@ -48,7 +36,6 @@ volumes:
 
 networks:
   app_db:
-  app_web:
   proxy_apps:
     name: proxy_apps
     external: true
