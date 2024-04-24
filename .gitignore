@@ -1,4 +1,4 @@
 .idea
 .env
-conf/
-!conf/default.conf
+conf/sites
+!conf/sites/default.conf

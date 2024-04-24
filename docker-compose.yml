@@ -22,7 +22,8 @@ services:
     restart: unless-stopped
     volumes:
       - app_data:/var/www/html
-      - $PWD/conf:/etc/nginx/conf.d:ro
+      - $PWD/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - $PWD/conf/sites:/etc/nginx/conf.d:ro
     networks:
       app_web:
       proxy_apps:
