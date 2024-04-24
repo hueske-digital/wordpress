@@ -2,13 +2,13 @@ version: "3.8"
 
 services:
   app:
-    image: wordpress:php8.3-fpm-alpine
+    image: wordpress:php${PHP_VERSION:-8.3}-fpm-alpine
     restart: unless-stopped
     environment:
-      - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_USER=wordpress
-      - WORDPRESS_DB_PASSWORD=wordpress
-      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DB_HOST=${DB_HOST:-db}
+      - WORDPRESS_DB_USER=${DB_USER:-wordpress}
+      - WORDPRESS_DB_PASSWORD=${DB_PASSWORD:-wordpress}
+      - WORDPRESS_DB_NAME=${DB_NAME:-wordpress}
     volumes:
       - app_data:/var/www/html
     networks:
@@ -30,13 +30,13 @@ services:
       - app
 
   db:
-    image: mariadb:11.4-rc
+    image: mariadb:${MARIADB_VERSION:-11.4-rc}
     restart: unless-stopped
     environment:
-      - MARIADB_ROOT_PASSWORD=wordpress
-      - MARIADB_DATABASE=wordpress
-      - MARIADB_USER=wordpress
-      - MARIADB_PASSWORD=wordpress
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-wordpress}
+      - MARIADB_DATABASE=${DB_NAME:-wordpress}
+      - MARIADB_USER=${DB_USER:-wordpress}
+      - MARIADB_PASSWORD=${DB_PASSWORD:-wordpress}
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true
