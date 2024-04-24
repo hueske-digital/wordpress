@@ -41,7 +41,7 @@ services:
       - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=0 0 1 * * *"
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=wordpress --password=wordpress wordpress > /var/lib/mysql/backup.sql'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} ${DB_NAME:-wordpress} > /var/lib/mysql/backup.sql'"
     volumes:
       - db_data:/var/lib/mysql
     networks:
