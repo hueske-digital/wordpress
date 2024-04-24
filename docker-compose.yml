@@ -38,11 +38,10 @@ services:
       - MARIADB_USER=wordpress
       - MARIADB_PASSWORD=wordpress
     labels:
-      # Labels via env
-      ofelia.restart: "true"
-      ofelia.enabled: "true"
-      ofelia.job-exec.lampdbbackup.schedule: "0 0 1 * * *"
-      ofelia.job-exec.lampdbbackup.command: "sh -c 'mariadb-dump --user=wordpress --password=wordpress wordpress > /var/lib/mysql/backup.sql'"
+      - ofelia.restart=true
+      - ofelia.enabled=true
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=0 0 1 * * *"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=wordpress --password=wordpress wordpress > /var/lib/mysql/backup.sql'"
     volumes:
       - db_data:/var/lib/mysql
     networks:
