@@ -29,7 +29,7 @@ services:
       - $PWD/conf/nginx/sites:/etc/nginx/conf.d:ro
     networks:
       app_web:
-      #proxy_apps:
+      proxy_apps:
     depends_on:
       - app
 
@@ -58,6 +58,6 @@ volumes:
 networks:
   app_db:
   app_web:
-#  proxy_apps:
-#    name: proxy_apps
-#    external: true
+  proxy_apps:
+    name: proxy_apps
+    external: true
