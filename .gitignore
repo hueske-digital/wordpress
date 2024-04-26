@@ -3,3 +3,8 @@
 conf/nginx/sites/*
 !conf/nginx/sites/default.conf
 conf/php/custom.ini
+.DS_Store
+data/web/*
+data/db/*
+!data/web/README.md
+!data/db/README.md
