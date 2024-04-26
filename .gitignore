@@ -1,6 +1,5 @@
 .idea
 .env
-conf/php/custom.ini
 .DS_Store
 data/web/*
 data/db/*
