@@ -1,7 +1,5 @@
 .idea
 .env
-conf/nginx/sites/*
-!conf/nginx/sites/default.conf
 conf/php/custom.ini
 .DS_Store
 data/web/*

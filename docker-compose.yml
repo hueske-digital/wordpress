@@ -22,7 +22,9 @@ services:
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - $PWD/conf/nginx/sites:/etc/nginx/conf.d:ro
+      - $PWD/conf/nginx/7g.conf:/etc/nginx/conf.d/7g.conf
+      - $PWD/conf/nginx/7g-firewall.conf:/etc/nginx/conf.d/7g-firewall.conf
+      - $PWD/conf/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       app_web:
       proxy_apps:
