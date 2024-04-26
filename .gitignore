@@ -1,4 +1,5 @@
 .idea
 .env
-conf/sites/*
-!conf/sites/default.conf
+conf/nginx/sites/*
+!conf/nginx/sites/default.conf
+conf/php/custom.ini
