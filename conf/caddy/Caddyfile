@@ -1,79 +1,77 @@
 {
     #log
-
     tls {
         dns cloudflare {env.CF_API_TOKEN}
     }
-
-    header {
-        Cache-Control "public, max-age=31536000"
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        X-Content-Type-Options nosniff
-        X-XSS-Protection "1; mode=block"
-        X-Frame-Options "SAMEORIGIN"
-        -Server
-        -X-Powered-By
-    }
-
-    @phpFiles {
-        path /wp-content/uploads/*.{php,pht,phtml,phps}
-        path /wp-content/plugins/*.{php,pht,phtml,phps}
-        path /wp-content/themes/*.{php,pht,phtml,phps}
-    }
-    respond @phpFiles 403
-
-    @adminAccess {
-        path /wp-admin/install.php
-        path /wp-admin/includes/*
-        not path /wp-includes/*
-        path /wp-includes/*/*.php
-        path /wp-includes/js/tinymce/langs/*.php
-        path /wp-includes/theme-compat/*
-    }
-    respond @adminAccess 403
-
-    @blockDotAccess {
-        path_regexp dotfiles (^|.*\/)\.(git|svn)\/.*
-    }
-    respond @blockDotAccess 403
-
-    @blockSqlFiles {
-        path *.sql
-    }
-    respond @blockSqlFiles 403
-
-    @imageFiles {
-        path *.jpeg *.jpg *.png *.gif
-    }
-
-    header @imageFiles {
-        Vary Accept
-    }
-
-    @webp {
-        header Accept image/webp
-        path *.jpeg *.jpg *.png *.gif
-        file {
-            try_files {path}.webp
-        }
-    }
-    rewrite @webp {http.request.uri.path}.webp
-
-    @webpType {
-        path *.webp
-    }
-    header @webpType {
-        Content-Type image/webp
-    }
-
-    encode zstd gzip
-
-    @noCache {
-        path *.json *.jsonld *.json *.xml *.webmanifest *.md *.html
-    }
-
-    header @noCache {
-        Cache-Control "public, max-age=0, must-revalidate"
-    }
-    reverse_proxy wordpress-web-1:80
 }
+
+header {
+    Cache-Control "public, max-age=31536000"
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options nosniff
+    X-XSS-Protection "1; mode=block"
+    X-Frame-Options "SAMEORIGIN"
+    -Server
+    -X-Powered-By
+}
+
+@phpFiles {
+    path /wp-content/uploads/*.{php,pht,phtml,phps}
+    path /wp-content/plugins/*.{php,pht,phtml,phps}
+    path /wp-content/themes/*.{php,pht,phtml,phps}
+}
+respond @phpFiles 403
+
+@adminAccess {
+    path /wp-admin/install.php
+    path /wp-admin/includes/*
+    not path /wp-includes/*
+    path /wp-includes/*/*.php
+    path /wp-includes/js/tinymce/langs/*.php
+    path /wp-includes/theme-compat/*
+}
+respond @adminAccess 403
+
+@blockDotAccess {
+    path_regexp dotfiles (^|.*\/)\.(git|svn)\/.*
+}
+respond @blockDotAccess 403
+
+@blockSqlFiles {
+    path *.sql
+}
+respond @blockSqlFiles 403
+
+@imageFiles {
+    path *.jpeg *.jpg *.png *.gif
+}
+header @imageFiles {
+    Vary Accept
+}
+
+@webp {
+    header Accept image/webp
+    path *.jpeg *.jpg *.png *.gif
+    file {
+        try_files {path}.webp
+    }
+}
+rewrite @webp {http.request.uri.path}.webp
+
+@webpType {
+    path *.webp
+}
+header @webpType {
+    Content-Type image/webp
+}
+
+encode zstd gzip
+
+@noCache {
+    path *.json *.jsonld *.json *.xml *.webmanifest *.md *.html
+}
+header @noCache {
+    Cache-Control "public, max-age=0, must-revalidate"
+}
+
+reverse_proxy wordpress-web-1:80
