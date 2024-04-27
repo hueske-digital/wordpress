@@ -1,0 +1,25 @@
+https://wordpress.hueske.services {
+
+    # import logging
+    import tls
+    import compression
+    import header
+
+    @webp {
+        header Accept image/webp
+        path *.jpeg *.jpg *.png *.gif
+        file {
+            try_files {path}.webp
+        }
+    }
+    rewrite @webp {http.request.uri.path}.webp
+
+    header *.jpeg *.jpg *.png *.gif Vary Accept
+
+    @webpType {
+        path *.webp
+    }
+    header @webpType Content-Type image/webp
+
+    reverse_proxy lamp-web-1:80
+}
