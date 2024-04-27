@@ -1,6 +1,6 @@
 services:
   app:
-    image: wordpress:php${PHP_VERSION:-8.3}-fpm-alpine
+    image: ghcr.io/hueske-digital/wordpress:latest
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
