@@ -41,7 +41,7 @@ https://wp-test.hueske.services {
     }
 
     @smallCache {
-        path *.rss *.atom *.json *.xml *.pdf *.csv *.docx *.xlsx *.pptx
+        path *.pdf *.csv *.docx *.xlsx *.pptx
     }
     header @smallCache {
         Cache-Control "public, max-age=3600" # 1 hour
