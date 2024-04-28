@@ -9,6 +9,11 @@ server {
 
 	include /etc/nginx/conf.d/7g.conf;
 
+	location ~* ^.+\.(png|jpe?g|gif)$ {
+      add_header Vary Accept;
+      try_files $uri$webp_suffix $uri =404;
+    }
+
     location / {
         try_files $uri $uri/ /index.php?$args;
     }
