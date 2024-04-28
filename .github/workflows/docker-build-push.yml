@@ -28,7 +28,7 @@ jobs:
         uses: lucacome/docker-image-update-checker@v1
         with:
           base-image: wordpress:php${PHP_VERSION}-fpm-alpine
-          image: ghcr.io/hueske-digital/wordpress:latest
+          image: hueske-digital/wordpress:latest
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
