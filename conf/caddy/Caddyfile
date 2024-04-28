@@ -1,4 +1,4 @@
-https://wordpress.hueske.services {
+https://wp-test.hueske.services {
     # log
     tls {
         dns cloudflare {env.CF_API_TOKEN}
