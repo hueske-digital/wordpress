@@ -13,3 +13,4 @@ docker compose down -v && docker compose up -d
 - Alpine Base setup
 - caddy
 - cronjobs
+- restic
