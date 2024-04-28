@@ -1,8 +1,5 @@
-https://www.example.com {
-	redir https://example.com{uri}
-}
+https://*.sites.hueske.digital {
 
-https://example.com {
     #log
     tls {
         dns cloudflare {env.CF_API_TOKEN}
@@ -13,6 +10,7 @@ https://example.com {
         X-Content-Type-Options nosniff
         X-XSS-Protection "1; mode=block"
         X-Frame-Options "SAMEORIGIN"
+        X-Robots-Tag "none"
         -Server
         -X-Powered-By
     }
@@ -50,5 +48,5 @@ https://example.com {
         Cache-Control "public, max-age=3600" # 1 hour
     }
 
-    reverse_proxy wordpress-web-1:80
+    reverse_proxy {http.request.host.labels.3}-web-1:80
 }
