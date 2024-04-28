@@ -10,7 +10,7 @@ services:
       - WORDPRESS_DB_NAME=${DB_NAME:-wordpress}
     volumes:
       - $PWD/data/web:/var/www/html
-      - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/90-custom.ini
     networks:
       app_db:
       app_web:
@@ -48,9 +48,9 @@ services:
       - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=0 0 3 * * *"
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} ${DB_NAME:-wordpress} > /var/lib/mysql/backup.sql'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} ${DB_NAME:-wordpress} > /docker-entrypoint-initdb.d/backup.sql'"
     volumes:
-      - $PWD/data/db:/docker-entrypoint-initdb.d:ro
+      - $PWD/data/db:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     networks:
       app_db:
