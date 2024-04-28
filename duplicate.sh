@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo "Gib den Namen des neuen Ordners ein:"
+echo "Gib den Namen des neuen Ordners (z. B. hueske) ein:"
 read new_dir_name
 
-echo "Gib die neue Domain ein:"
+echo "Gib die neue Domain (z. B. hueske.de) ein:"
 read new_domain
 
 current_dir="$(dirname "$(realpath "$0")")"
@@ -19,7 +19,7 @@ else
 fi
 
 source_file="$current_dir/../$new_dir_name/conf/caddy/Caddyfile"
-destination_file="$current_dir/../../caddy/hosts/external/$new_dir_name.conf"
+destination_file="$current_dir/../caddy/hosts/external/$new_dir_name.conf"
 
 if [[ -f "$source_file" ]]; then
     cp "$source_file" "$destination_file" 2>/dev/null
@@ -44,3 +44,9 @@ else
 fi
 
 echo "Vorgang erfolgreich abgeschlossen."
+echo "Möchtest du 'docker compose up -d' im neuen Verzeichnis ausführen? (y/n)"
+read answer
+if [[ "$answer" == "y" ]]; then
+    (cd "$current_dir/../$new_dir_name" && docker compose up -d)
+    echo "Docker Compose wurde gestartet."
+fi
