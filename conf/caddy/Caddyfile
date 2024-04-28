@@ -27,6 +27,7 @@ https://example.com {
     respond /wp-includes/js/tinymce/langs/*.php 403
     respond /wp-includes/theme-compat/*.php 403
     respond /wp-config.php 403
+    respond /README.md 403
 
     encode zstd gzip
 
