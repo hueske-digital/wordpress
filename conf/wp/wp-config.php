@@ -14,3 +14,6 @@ define( 'DB_HOST', getenv_docker('WORDPRESS_DB_HOST', 'db') );
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) {
     $_SERVER['HTTPS'] = 'on';
 }
+
+
+define( 'DISABLE_WP_CRON', true );
