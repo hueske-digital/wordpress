@@ -11,9 +11,9 @@ define( 'DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD') );
 /** MySQL hostname */
 define( 'DB_HOST', getenv('WORDPRESS_DB_HOST') );
 
+define( 'DISABLE_WP_CRON', true );
+define( 'EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE', true );
+
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) {
     $_SERVER['HTTPS'] = 'on';
 }
-
-
-define( 'DISABLE_WP_CRON', true );
