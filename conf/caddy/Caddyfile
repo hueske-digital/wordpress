@@ -1,9 +1,14 @@
 https://www.example.com {
+    tls {
+        dns cloudflare {env.CF_API_TOKEN}
+    }
+
 	redir https://example.com{uri}
 }
 
 https://example.com {
     #log
+
     tls {
         dns cloudflare {env.CF_API_TOKEN}
     }
