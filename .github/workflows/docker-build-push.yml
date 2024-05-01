@@ -2,7 +2,7 @@ name: Build and Push Docker image
 
 env:
   PHP_VERSION: 8.3
-  BASE_IMAGE: wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
+  BASE_IMAGE: wordpress:php8.3-fpm-alpine
   OWN_IMAGE: ghcr.io/hueske-digital/wordpress:latest
 
 on:
@@ -46,15 +46,15 @@ jobs:
         run: |
           layers_image1=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ${{ env.BASE_IMAGE }})
           layers_image2=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ${{ env.OWN_IMAGE }})
-          
+
           last_layer_image1=$(echo $layers_image1 | awk '{print $NF}')
-          
+
           if echo $layers_image2 | grep -q $last_layer_image1; then
             echo "image_changed=false" >> $GITHUB_ENV
-            echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist ein Bestandteil von ${{ env.OWN_IMAGE }."
+            echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist ein Bestandteil von ${{ env.OWN_IMAGE }}."
           else
             echo "image_changed=true" >> $GITHUB_ENV
-            echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist kein Bestandteil von ${{ env.OWN_IMAGE }."
+            echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist kein Bestandteil von ${{ env.OWN_IMAGE }}."
           fi
 
       - name: Build and push Docker image
@@ -63,7 +63,7 @@ jobs:
         with:
           push: true
           context: ./build
-          tags: ghcr.io/hueske-digital/wordpress:latest
+          tags: ${{ env.OWN_IMAGE }}
           platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
