@@ -11,7 +11,7 @@ services:
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=0 */5 * * * *"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=${WORDPRESS_CRON_SCHEDULE:-0 */5 * * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'su-exec www-data php wp-cron.php'"
     volumes:
       - $PWD/data/web:/var/www/html
@@ -52,7 +52,7 @@ services:
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=0 0 3 * * *"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=${BACKUP_CRON_SCHEDULE:-0 0 3 * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} ${DB_NAME:-wordpress} > /docker-entrypoint-initdb.d/backup.sql'"
     volumes:
       - $PWD/data/db:/docker-entrypoint-initdb.d
