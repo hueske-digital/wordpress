@@ -24,7 +24,7 @@ jobs:
         id: baseupdatecheck
         uses: lucacome/docker-image-update-checker@v1
         with:
-          base-image: wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
+          base-image: library/wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
           image: hueske-digital/wordpress
 
       - name: Checkout code
