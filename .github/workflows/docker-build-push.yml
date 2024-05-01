@@ -2,6 +2,8 @@ name: Build and Push Docker image
 
 env:
   PHP_VERSION: 8.3
+  BASE_IMAGE: wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
+  OWN_IMAGE: ghcr.io/hueske-digital/wordpress:latest
 
 on:
   push:
@@ -34,25 +36,25 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull Base Image for Comparison
-        run: docker pull wordpress:php${{ env.PHP_VERSION }}-fpm-alpine || true
+        run: docker pull ${{ env.BASE_IMAGE }} || true
 
       - name: Pull Last Built Image for Comparison
-        run: docker pull ghcr.io/hueske-digital/wordpress:latest || true
+        run: docker pull ${{ env.OWN_IMAGE }} || true
 
       - name: Check if base image has changed
         id: check_layer
         run: |
-          layers_image1=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' wordpress:php${{ env.PHP_VERSION }}-fpm-alpine)
-          layers_image2=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ghcr.io/hueske-digital/wordpress:latest)
+          layers_image1=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ${{ env.BASE_IMAGE }})
+          layers_image2=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ${{ env.OWN_IMAGE }})
           
           last_layer_image1=$(echo $layers_image1 | awk '{print $NF}')
           
           if echo $layers_image2 | grep -q $last_layer_image1; then
             echo "image_changed=false" >> $GITHUB_ENV
-            echo "Der letzte Layer von $image1 ist ein Bestandteil von $image2."
+            echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist ein Bestandteil von ${{ env.OWN_IMAGE }."
           else
             echo "image_changed=true" >> $GITHUB_ENV
-            echo "Der letzte Layer von $image1 ist kein Bestandteil von $image2."
+            echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist kein Bestandteil von ${{ env.OWN_IMAGE }."
           fi
 
       - name: Build and push Docker image
