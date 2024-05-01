@@ -50,8 +50,6 @@ jobs:
             echo "Image has changed."
             echo "image_changed=true" >> $GITHUB_ENV
         shell: bash
-        env:
-          PHP_VERSION=${{ env.PHP_VERSION }}
 
       - name: Build and push Docker image
         if: env.image_changed == 'true'
