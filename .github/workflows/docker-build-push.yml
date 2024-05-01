@@ -44,12 +44,12 @@ jobs:
         run: |
           last_layer_base=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' wordpress:php${{ env.PHP_VERSION }}-fpm-alpine | awk '{print $NF}')
           last_layer_current=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ghcr.io/hueske-digital/wordpress:latest | awk '{print $NF}')
-          if [[ "$last_layer_base" != "$last_layer_current" ]]; then
-            echo "Image needs to be rebuilt"
-            echo "image_changed=true" >> $GITHUB_ENV
-          else
-            echo "Image does not need to be rebuilt"
+          if echo $last_layer_base | grep -q $last_layer_current; then
             echo "image_changed=false" >> $GITHUB_ENV
+            echo "Der letzte Layer von $image1 ist ein Bestandteil von $image2."
+          else
+            echo "image_changed=true" >> $GITHUB_ENV
+            echo "Der letzte Layer von $image1 ist kein Bestandteil von $image2."
           fi
 
       - name: Build and push Docker image
