@@ -33,27 +33,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull Base Image for Comparison
-        run: docker pull wordpress:php${{ env.PHP_VERSION }}-fpm-alpine || true
-
-      - name: Pull Last Built Image for Comparison
-        run: docker pull ghcr.io/hueske-digital/wordpress:latest || true
-
-      - name: Compare Images
+      - name: Pull the necessary images
         run: |
-          BASE_IMAGE_ID=$(docker inspect --format='{{.Id}}' wordpress:php${{ env.PHP_VERSION }}-fpm-alpine)
-          LAST_IMAGE_ID=$(docker inspect --format='{{.Id}}' ghcr.io/hueske-digital/wordpress:latest || echo "none")
-          if [ "$BASE_IMAGE_ID" = "$LAST_IMAGE_ID" ]; then
-            echo "Image has not changed."
-            echo "image_changed=false" >> $GITHUB_ENV
+          docker pull wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
+          docker pull ghcr.io/hueske-digital/wordpress:latest
+
+      - name: Get the last layer ID of the base image
+        id: base_image
+        run: |
+          BASE_IMAGE_LAST_LAYER=$(docker inspect wordpress:php${{ env.PHP_VERSION }}-fpm-alpine --format='{{index .RootFS.Layers (len .RootFS.Layers - 1)}}')
+          echo "BASE_IMAGE_LAST_LAYER=$BASE_IMAGE_LAST_LAYER" >> $GITHUB_ENV
+
+      - name: Get all layers of your custom image
+        run: |
+          CUSTOM_IMAGE_LAYERS=$(docker inspect ghcr.io/hueske-digital/wordpress:latest --format='{{range .RootFS.Layers}}{{.}}{{"\n"}}{{end}}' || echo "none")
+          echo "CUSTOM_IMAGE_LAYERS=$CUSTOM_IMAGE_LAYERS" >> $GITHUB_ENV
+
+      - name: Check if the base image last layer is in the custom image layers
+        run: |
+          if echo "$CUSTOM_IMAGE_LAYERS" | grep -q "$BASE_IMAGE_LAST_LAYER"; then
+            echo "The base layer is present in the custom image."
+            echo "base_layer_changed=false" >> $GITHUB_ENV
           else
-            echo "Image has changed."
-            echo "image_changed=true" >> $GITHUB_ENV
+            echo "The base layer is not present in the custom image."
+            echo "base_layer_changed=true" >> $GITHUB_ENV
           fi
-        shell: bash
 
       - name: Build and push Docker image
-        if: env.image_changed == 'true'
+        if: env.base_layer_changed == 'true'
         uses: docker/build-push-action@v3
         with:
           push: true
