@@ -11,7 +11,14 @@ on:
       - main
 
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '0 1 * * *'
+
+  workflow_dispatch:
+    inputs:
+      force_build:
+        description: 'Set to "true" to force rebuild and push the Docker image regardless of changes'
+        required: false
+        default: 'false'
 
 jobs:
   build:
@@ -55,6 +62,11 @@ jobs:
           else
             echo "image_changed=true" >> $GITHUB_ENV
             echo "Der letzte Layer von ${{ env.BASE_IMAGE }} ist kein Bestandteil von ${{ env.OWN_IMAGE }}."
+          fi
+          
+          if [ "${{ github.event.inputs.force_build }}" == "true" ]; then
+            echo "Force build requested."
+            echo "image_changed=true" >> $GITHUB_ENV
           fi
 
       - name: Build and push Docker image
