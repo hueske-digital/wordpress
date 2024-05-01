@@ -34,10 +34,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull Base Image for Comparison
-        run: docker pull wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
+        run: docker pull wordpress:php${{ env.PHP_VERSION }}-fpm-alpine || true
 
       - name: Pull Last Built Image for Comparison
-        run: docker pull ghcr.io/hueske-digital/wordpress:latest || true  # This may fail if the image does not exist
+        run: docker pull ghcr.io/hueske-digital/wordpress:latest || true
 
       - name: Compare Images
         run: |
