@@ -20,20 +20,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Docker Image Update Checker
-        id: baseupdatecheck
-        uses: lucacome/docker-image-update-checker@v1
-        with:
-          base-image: library/wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
-          image: ghcr.io/hueske-digital/wordpress:latest
-
       - name: Checkout code
         uses: actions/checkout@v4
-        if: steps.baseupdatecheck.outputs.needs-updating == 'true'
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        if: steps.baseupdatecheck.outputs.needs-updating == 'true'
 
       - name: Login to GitLab Container Registry
         uses: docker/login-action@v3
@@ -41,9 +32,27 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.baseupdatecheck.outputs.needs-updating == 'true'
+
+      - name: Pull Base Image for Comparison
+        run: docker pull wordpress:php${{ env.PHP_VERSION }}-fpm-alpine
+
+      - name: Pull Last Built Image for Comparison
+        run: docker pull ghcr.io/hueske-digital/wordpress:latest || true  # This may fail if the image does not exist
+
+      - name: Compare Images
+        id: compare-images
+        run: |
+          BASE_IMAGE_ID=$(docker inspect --format='{{.Id}}' wordpress:php${{ env.PHP_VERSION }}-fpm-alpine)
+          LAST_IMAGE_ID=$(docker inspect --format='{{.Id}}' ghcr.io/hueske-digital/wordpress:latest || echo "none")
+          if [ "$BASE_IMAGE_ID" = "$LAST_IMAGE_ID" ]; then
+            echo "Image has not changed."
+            echo "image_changed=false" >> $GITHUB_ENV
+          else
+            echo "Image has changed."
+            echo "image_changed=true" >> $GITHUB_ENV
 
       - name: Build and push Docker image
+        if: env.image_changed == 'true'
         uses: docker/build-push-action@v3
         with:
           push: true
@@ -52,7 +61,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
-        if: steps.baseupdatecheck.outputs.needs-updating == 'true'
 
       - name: Do not automatically disable workflow execution
         uses: gautamkrishnar/keepalive-workflow@v1
