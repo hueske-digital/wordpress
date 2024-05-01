@@ -50,6 +50,7 @@ jobs:
           else
             echo "Image does not need to be rebuilt"
             echo "image_changed=false" >> $GITHUB_ENV
+          fi
 
       - name: Build and push Docker image
         if: env.image_changed == 'true'
