@@ -49,6 +49,7 @@ jobs:
           else
             echo "Image has changed."
             echo "image_changed=true" >> $GITHUB_ENV
+          fi
         shell: bash
 
       - name: Build and push Docker image
