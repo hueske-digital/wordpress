@@ -42,9 +42,12 @@ jobs:
       - name: Check if base image has changed
         id: check_layer
         run: |
-          last_layer_base=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' wordpress:php${{ env.PHP_VERSION }}-fpm-alpine | awk '{print $NF}')
-          last_layer_current=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ghcr.io/hueske-digital/wordpress:latest)
-          if echo $last_layer_base | grep -q $last_layer_current; then
+          layers_image1=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' wordpress:php${{ env.PHP_VERSION }}-fpm-alpine)
+          layers_image2=$(docker inspect --format='{{range .RootFS.Layers}}{{.}} {{end}}' ghcr.io/hueske-digital/wordpress:latest)
+          
+          last_layer_image1=$(echo $layers_image1 | awk '{print $NF}')
+          
+          if echo $layers_image2 | grep -q $last_layer_image1; then
             echo "image_changed=false" >> $GITHUB_ENV
             echo "Der letzte Layer von $image1 ist ein Bestandteil von $image2."
           else
