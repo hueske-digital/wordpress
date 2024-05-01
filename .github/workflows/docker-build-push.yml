@@ -41,7 +41,8 @@ jobs:
       - name: Get the last layer ID of the base image
         id: base_image
         run: |
-          BASE_IMAGE_LAST_LAYER=$(docker inspect wordpress:php${{ env.PHP_VERSION }}-fpm-alpine --format='{{index .RootFS.Layers (len .RootFS.Layers - 1)}}')
+          ALL_LAYERS=$(docker inspect wordpress:php8.3-fpm-alpine --format='{{range .RootFS.Layers}}{{.}} {{end}}')
+          BASE_IMAGE_LAST_LAYER=$(echo $ALL_LAYERS | awk '{print $NF}')
           echo "BASE_IMAGE_LAST_LAYER=$BASE_IMAGE_LAST_LAYER" >> $GITHUB_ENV
 
       - name: Get all layers of your custom image
