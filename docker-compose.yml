@@ -8,6 +8,12 @@ services:
       - WORDPRESS_DB_USER=${DB_USER:-wordpress}
       - WORDPRESS_DB_PASSWORD=${DB_PASSWORD:-wordpress}
       - WORDPRESS_DB_NAME=${DB_NAME:-wordpress}
+      - PHP_FPM_PM_MODE=${PHP_FPM_PM_MODE:-dynamic}
+      - PHP_FPM_PM_MAX_CHILDREN=${PHP_FPM_PM_MAX_CHILDREN:-5}
+      - PHP_FPM_PM_START_SERVERS=${PHP_FPM_PM_START_SERVERS:-2}
+      - PHP_FPM_PM_MIN_SPARE_SERVERS=${PHP_FPM_PM_MIN_SPARE_SERVERS:-1}
+      - PHP_FPM_PM_MAX_SPARE_SERVERS=${PHP_FPM_PM_MAX_SPARE_SERVERS:-3}
+      - PHP_FPM_PM_MAX_REQUESTS=${PHP_FPM_PM_MAX_REQUESTS:-200}
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true
@@ -16,6 +22,7 @@ services:
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/90-custom.ini
+      - $PWD/conf/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
     networks:
       app_db:
       app_web:
