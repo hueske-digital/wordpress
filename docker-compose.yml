@@ -67,18 +67,16 @@ services:
     networks:
       app_db:
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+  adminer:
+    image: adminer
     restart: unless-stopped
     environment:
-      - PMA_HOST=db
-      - PMA_USER=${DB_USER:-wordpress}
-      - PMA_PASSWORD=${DB_PASSWORD:-wordpress}
+      - ADMINER_DEFAULT_SERVER=db
     networks:
       app_db:
       proxy_apps:
     profiles:
-      - phpmyadmin
+      - adminer
 
 volumes:
   db_data:
