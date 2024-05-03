@@ -5,6 +5,12 @@ docker compose down -v && docker compose up -d
 
 # Restore from restic backup
 
+# adminer
+docker-compose --profile adminer up -d
+
+docker-compose --profile adminer stop adminer
+
+
 # Requirements
 
 - Alpine Base setup
