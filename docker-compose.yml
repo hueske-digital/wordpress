@@ -67,6 +67,19 @@ services:
     networks:
       app_db:
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=${DB_USER:-wordpress}
+      - PMA_PASSWORD=${DB_PASSWORD:-wordpress}
+    networks:
+      app_db:
+      proxy_apps:
+    profiles:
+      - phpmyadmin
+
 volumes:
   db_data:
 

@@ -51,4 +51,8 @@ https://*.sites.hueske.digital {
     }
 
     reverse_proxy {http.request.host.labels.3}-web-1:80
+
+    handle_path /pma/* {
+        reverse_proxy {http.request.host.labels.3}-phpmyadmin-1:80
+    }
 }
