@@ -50,6 +50,7 @@ services:
   db:
     image: mariadb:${MARIADB_VERSION:-11.4-rc}
     restart: unless-stopped
+    command: mariadbd --innodb-buffer-pool-size=${MARIADB_INNODB_BUFFER_SIZE:-128M} --max-connections=${MARIADB_MAX_CONNECTIONS:-150} --tmp-table-size=${MARIADB_TMP_TABLE_SIZE:-16M} --max-heap-table-size=${MARIADB_MAX_HEAP_TABLE_SIZE:-16M}
     environment:
       - TZ=Europe/Berlin
       - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-wordpress}
