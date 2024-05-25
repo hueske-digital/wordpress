@@ -15,7 +15,7 @@ https://example.com {
 
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        Cache-Control "public, max-age=3600, must-revalidate"
+        Cache-Control "public, max-age=0, must-revalidate"
         X-Content-Type-Options nosniff
         X-XSS-Protection "1; mode=block"
         X-Frame-Options "SAMEORIGIN"
@@ -35,13 +35,6 @@ https://example.com {
     respond /README.md 403
 
     encode zstd gzip
-
-    @noCache {
-        path *.html *.php *.json *.xml *.rss *.atom
-    }
-    header @noCache {
-        Cache-Control "public, max-age=0, must-revalidate"
-    }
 
     @longCache {
         path *.css *.js *.png *.jpg *.jpeg *.gif *.heic *.heif *.ico *.svg *.woff *.woff2 *.ttf *.otf *.mp4 *.mov *.webm *.eot *.jxl *.avif *.webp *.bmp *.m4v *.tif *.tiff *.mp3 *.m4a
