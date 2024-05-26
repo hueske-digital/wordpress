@@ -98,6 +98,7 @@ services:
 
 volumes:
   db_data:
+  sftp_keys:
 
 networks:
   sftp:
