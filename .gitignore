@@ -5,3 +5,5 @@ data/web/*
 data/db/*
 !data/web/README.md
 !data/db/README.md
+publickeys/*
+!publickeys/README.md
