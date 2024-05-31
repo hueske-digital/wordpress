@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.3
+ARG PHP_VERSION
 
 FROM wordpress:php${PHP_VERSION}-fpm-alpine as builder
 RUN apk add --no-cache libwebp-tools libjpeg-turbo-utils gifsicle optipng pngquant su-exec
