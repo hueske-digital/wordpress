@@ -9,6 +9,9 @@ RUN echo '#!/bin/sh' > /usr/bin/wp \
     && echo 'exec su-exec www-data /usr/bin/wpcli "$@"' >> /usr/bin/wp \
     && chmod +x /usr/bin/wp
 
+FROM rust:alpine as builder2
+RUN cargo install svgcleaner
+
 FROM wordpress:php${PHP_VERSION}-fpm-alpine
 COPY --from=builder /usr/bin/cwebp /usr/bin/cwebp
 COPY --from=builder /usr/bin/jpegtran /usr/bin/jpegtran
@@ -18,3 +21,4 @@ COPY --from=builder /usr/bin/pngquant /usr/bin/pngquant
 COPY --from=builder /usr/bin/wp /usr/bin/wp
 COPY --from=builder /usr/bin/wpcli /usr/bin/wpcli
 COPY --from=builder /sbin/su-exec /sbin/su-exec
+COPY --from=builder2 /usr/local/cargo/bin/svgcleaner /usr/bin/svgcleaner
