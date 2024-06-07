@@ -6,7 +6,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/bin/wpcli
 RUN echo '#!/bin/sh' > /usr/bin/wp \
-    && echo 'exec su-exec www-data /usr/bin/wpcli "$@"' >> /usr/bin/wp \
+    && echo 'exec su-exec 1000:1000 /usr/bin/wpcli "$@"' >> /usr/bin/wp \
     && chmod +x /usr/bin/wp
 
 FROM rust:alpine as builder2
