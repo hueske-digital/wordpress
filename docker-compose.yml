@@ -19,7 +19,7 @@ services:
       - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=${WORDPRESS_CRON_SCHEDULE:-0 */5 * * * *}"
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'su-exec 1000:1000 php wp-cron.php'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'php wp-cron.php'"
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/90-custom.ini
