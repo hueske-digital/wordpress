@@ -6,4 +6,4 @@ data/db/*
 !data/web/README.md
 !data/db/README.md
 keys/*
-!keys/README.md
+!keys/.gitkeep

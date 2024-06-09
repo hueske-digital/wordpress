@@ -81,29 +81,32 @@ services:
     profiles:
       - adminer
 
-  sftp:
-    image: ghcr.io/hueske-digital/sftp:latest
+  ssh:
+    image: lscr.io/linuxserver/openssh-server:latest
     restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - PUBLIC_KEY_DIR=/keys
+      - SUDO_ACCESS=false
+      - PASSWORD_ACCESS=false
+      - USER_NAME=${SSH_USERNAME}
+      - LOG_STDOUT=true
     volumes:
-      - sftp_keys:/etc/ssh
-      - $PWD/data/web/wp-content/themes:/home/${SFTP_USERNAME}/themes
-      - $PWD/keys:/home/${SFTP_USERNAME}/.ssh/keys:ro
+      - ssh_config:/config
+      - $PWD/data/web/wp-content/themes:/themes
+      - $PWD/keys:/keys:ro
     ports:
-      - "2222:22"
+      - "2222:2222"
     networks:
       default:
-    # Empty password = only allow publickeys
-    command: ${SFTP_USERNAME}:${SFTP_PASSWORD}:1000
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
     profiles:
-      - sftp
+      - ssh
 
 volumes:
   db_data:
-  sftp_keys:
+  ssh_config:
 
 networks:
   default:
