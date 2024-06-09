@@ -81,10 +81,32 @@ services:
     profiles:
       - adminer
 
+  sftp:
+    image: ghcr.io/hueske-digital/sftp:latest
+    restart: unless-stopped
+    volumes:
+      - sftp_keys:/etc/ssh
+      - $PWD/data/web/wp-content/themes:/home/${SFTP_USERNAME}/themes
+      - $PWD/keys:/home/${SFTP_USERNAME}/.ssh/keys:ro
+    ports:
+      - "2222:22"
+    networks:
+      default:
+    # Empty password = only allow publickeys
+    command: ${SFTP_USERNAME}:${SFTP_PASSWORD}:1000
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    profiles:
+      - sftp
+
 volumes:
   db_data:
+  sftp_keys:
 
 networks:
+  default:
   app_db:
   app_web:
   proxy_apps:
