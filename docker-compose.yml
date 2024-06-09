@@ -95,6 +95,7 @@ services:
       - LOG_STDOUT=true
     volumes:
       - ssh_config:/config
+      - $PWD/conf/ssh/add-rsync.sh:/custom-cont-init.d/add-rsync.sh:ro
       - $PWD/data/web/wp-content/themes:/themes
       - $PWD/keys:/keys:ro
     ports:
