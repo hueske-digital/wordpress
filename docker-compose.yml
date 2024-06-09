@@ -91,7 +91,7 @@ services:
       - PUBLIC_KEY_DIR=/keys
       - SUDO_ACCESS=false
       - PASSWORD_ACCESS=false
-      - USER_NAME=${SSH_USERNAME}
+      - USER_NAME=${COMPOSE_PROJECT_NAME}deployment
       - LOG_STDOUT=true
     volumes:
       - ssh_config:/config
@@ -99,7 +99,7 @@ services:
       - $PWD/data/web/wp-content/themes:/themes
       - $PWD/keys:/keys:ro
     ports:
-      - "2222:2222"
+      - "${SSH_PORT:-2222}:2222"
     networks:
       default:
     profiles:
