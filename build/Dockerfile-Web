@@ -17,10 +17,10 @@ RUN mkdir -p /usr/src \
     && cd /usr/src \
     && curl -LO http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
     && tar -zxvf nginx-${NGINX_VERSION}.tar.gz
-RUN git clone https://github.com/FRiCKLE/ngx_cache_purge /usr/src/ngx_cache_purge
+RUN git clone https://github.com/torden/ngx_cache_purge.git /usr/src/ngx_cache_purge
 RUN cd /usr/src/nginx-${NGINX_VERSION} \
     && ./configure --with-compat --add-dynamic-module=/usr/src/ngx_cache_purge \
     && make modules
 
 FROM nginx:stable-alpine
-COPY --from=builder /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_cache_purge_module.o /etc/nginx/modules/
+COPY --from=builder /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_cache_purge_module.so /etc/nginx/modules/
