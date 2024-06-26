@@ -62,7 +62,7 @@ server {
     }
 
     location ~ /purge(/.*) {
-          fastcgi_cache_purge wpcache "$scheme$request_method$host$request_uri";
+          fastcgi_cache_purge wpcache "$scheme$request_method$host$1";
           allow 127.0.0.1;
           allow 10.0.0.0/8;
           allow 172.16.0.0/12;
