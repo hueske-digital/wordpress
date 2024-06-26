@@ -2,7 +2,6 @@ name: Build and Push Docker image
 
 env:
   PHP_VERSION: 8.3
-  NGINX_VERSION: 1.26.1
   FPM_IMAGE: ghcr.io/hueske-digital/wordpress:latest
   NGINX_IMAGE: ghcr.io/hueske-digital/wordpress:nginx
 
@@ -55,8 +54,6 @@ jobs:
           file: ./build/Dockerfile-Web
           tags: ${{ env.NGINX_IMAGE }}
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            NGINX_VERSION=${{ env.NGINX_VERSION }}
 
       - name: Do not automatically disable workflow execution
         uses: gautamkrishnar/keepalive-workflow@v1
