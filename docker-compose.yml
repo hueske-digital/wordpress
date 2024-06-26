@@ -32,7 +32,7 @@ services:
       - db
 
   web:
-    image: ghcr.io/hueske-digital/wordpress:nginx
+    image: nginx:stable-alpine
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
