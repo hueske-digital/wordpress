@@ -32,7 +32,7 @@ services:
       - db
 
   web:
-    image: nginxinc/nginx-unprivilege:stable-alpine
+    image: nginxinc/nginx-unprivileged:stable-alpine
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
