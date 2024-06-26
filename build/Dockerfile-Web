@@ -1,6 +1,10 @@
-ARG NGINX_VERSION
+FROM nginx:stable-alpine AS version_extractor
+RUN nginx -v 2>&1 | awk -F/ '{print $2}' > /nginx_version
 
-FROM nginx:stable-alpine as builder
+FROM nginx:stable-alpine AS builder
+COPY --from=version_extractor /nginx_version /nginx_version
+ARG NGINX_VERSION
+RUN export NGINX_VERSION=$(cat /nginx_version) && echo $NGINX_VERSION
 RUN apk add --no-cache \
     build-base \
     pcre-dev \
