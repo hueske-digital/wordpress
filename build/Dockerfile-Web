@@ -23,4 +23,4 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} \
     && make modules
 
 FROM nginx:stable-alpine
-COPY --from=builder /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_cache_purge_module.o /etc/nginx/modules/
+COPY --from=builder /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_cache_purge_module.so /etc/nginx/modules/
