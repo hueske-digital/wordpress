@@ -1,4 +1,4 @@
-perl_modules /etc/nginx/perl;
+perl_modules ${PERL5LIB};
 perl_require purge.pm;
 
 server {

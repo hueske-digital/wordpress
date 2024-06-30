@@ -37,7 +37,7 @@ services:
     environment:
       - TZ=Europe/Berlin
       - COMPOSE_PROJECT_NAME
-      - PERL5LIB=/etc/nginx/perl
+      - PERL5LIB=/usr/lib/perl5/vendor_perl/aarch64-linux-thread-multi
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/nginx/purge.pm:/etc/nginx/perl/purge.pm
