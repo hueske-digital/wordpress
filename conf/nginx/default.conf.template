@@ -43,15 +43,15 @@ server {
     }
 
     location /purge-all {
-        if ($purge_method) {
-            allow 127.0.0.1;
-            allow 10.0.0.0/8;
-            allow 172.16.0.0/12;
-            allow 192.168.0.0/16;
+        limit_except PURGE {
             deny all;
-            perl purge::purge;
         }
+        allow 127.0.0.1;
+        allow 10.0.0.0/8;
+        allow 172.16.0.0/12;
+        allow 192.168.0.0/16;
         deny all;
+        perl purge::purge;
     }
 
     location ~ \.php$ {
