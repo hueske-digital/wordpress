@@ -43,7 +43,7 @@ server {
     }
 
     location /purge-all {
-        limit_except PURGE {
+        limit_except DELETE {
             deny all;
         }
         allow 127.0.0.1;
