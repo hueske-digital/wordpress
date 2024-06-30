@@ -1,3 +1,8 @@
+load_module "modules/ngx_http_perl_module.so";
+
+perl_modules /etc/nginx/perl;
+perl_require purge.pm;
+
 server {
 	listen 80;
 	index index.php index.htm index.html;
@@ -16,6 +21,12 @@ server {
 
     location / {
         try_files $uri $uri/ /index.php?$args;
+    }
+
+    location /purge-all {
+        allow 127.0.0.1;
+        deny all;
+        perl purge::purge;
     }
 
     location ~ \.php$ {
