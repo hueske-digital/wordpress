@@ -6,8 +6,8 @@ fastcgi_cache_key "$scheme$request_method$host$request_uri";
 fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
 
 server {
-	listen 80;
-	index index.php index.htm index.html;
+    listen 80;
+    index index.php index.htm index.html;
 
     set $skip_cache 0;
 
@@ -26,16 +26,16 @@ server {
         set $skip_cache 1;
     }
 
-	root /var/www/html;
+    root /var/www/html;
 
-	error_log  /var/log/nginx/error.log;
-	access_log off;
+    error_log  /var/log/nginx/error.log;
+    access_log off;
 
-	include /etc/nginx/conf.d/7g.conf;
+    include /etc/nginx/conf.d/7g.conf;
 
-	location ~* ^.+\.(png|jpe?g|gif)$ {
-      add_header Vary Accept;
-      try_files $uri$webp_suffix $uri =404;
+    location ~* ^.+\.(png|jpe?g|gif)$ {
+        add_header Vary Accept;
+        try_files $uri$webp_suffix $uri =404;
     }
 
     location / {
