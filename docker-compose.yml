@@ -16,6 +16,7 @@ services:
       - PHP_FPM_PM_MIN_SPARE_SERVERS=${PHP_FPM_PM_MIN_SPARE_SERVERS:-1}
       - PHP_FPM_PM_MAX_SPARE_SERVERS=${PHP_FPM_PM_MAX_SPARE_SERVERS:-3}
       - PHP_FPM_PM_MAX_REQUESTS=${PHP_FPM_PM_MAX_REQUESTS:-200}
+      - WP_CLI_CACHE_DIR=/tmp/.wp-cli/cache
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true
