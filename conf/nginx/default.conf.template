@@ -64,7 +64,7 @@ server {
         fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_cache WORDPRESS;
         fastcgi_cache_background_update on;
-        fastcgi_cache_valid 200 301 302 2h;
+        fastcgi_cache_valid 200 301 302 12h;
         fastcgi_cache_use_stale error timeout updating invalid_header http_500 http_503;
         fastcgi_cache_min_uses 1;
         fastcgi_cache_lock on;
