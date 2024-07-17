@@ -32,6 +32,7 @@ services:
     networks:
       app_db:
       app_web:
+      proxy_mails:
     depends_on:
       - db
 
