@@ -28,6 +28,7 @@ services:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/90-custom.ini
       - $PWD/conf/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - $PWD/conf/msmtp/msmtprc:/etc/msmtprc
     networks:
       app_db:
       app_web:
@@ -119,6 +120,9 @@ networks:
   default:
   app_db:
   app_web:
+  proxy_mails:
+    name: proxy_mails
+    external: true
   proxy_apps:
     name: proxy_apps
     external: true
