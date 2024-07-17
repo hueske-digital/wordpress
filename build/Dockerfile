@@ -21,6 +21,5 @@ COPY --from=builder /usr/bin/optipng /usr/bin/optipng
 COPY --from=builder /usr/bin/pngquant /usr/bin/pngquant
 COPY --from=builder /usr/bin/wp /usr/bin/wp
 COPY --from=builder /usr/bin/wpcli /usr/bin/wpcli
-COPY --from=builder /usr/bin/msmtp /usr/bin/msmtp
 COPY --from=builder /sbin/su-exec /sbin/su-exec
 COPY --from=builder2 /usr/local/cargo/bin/svgcleaner /usr/bin/svgcleaner
