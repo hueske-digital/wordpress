@@ -1,7 +1,7 @@
 name: Build and Push Docker image
 
 env:
-  PHP_VERSION: 8.3
+  PHP_VERSION: 8.4
   OWN_IMAGE: ghcr.io/hueske-digital/wordpress:latest
   NGINX_IMAGE: ghcr.io/hueske-digital/wordpress:nginx
 
