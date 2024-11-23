@@ -31,7 +31,7 @@ server {
     error_log  /var/log/nginx/error.log;
     access_log off;
 
-    include /etc/nginx/conf.d/7g.conf;
+    include /etc/nginx/conf.d/8g.conf;
 
     location ~* ^.+\.(png|jpe?g|gif)$ {
         add_header Vary Accept;
