@@ -50,5 +50,7 @@ https://example.com {
         Cache-Control "public, max-age=3600" # 1 hour
     }
 
-    reverse_proxy wordpress-web-1:80
+    reverse_proxy wordpress-web-1:80 {
+        header_up X-Real-IP {remote_host}
+    }
 }
