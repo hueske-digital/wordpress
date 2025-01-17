@@ -2,7 +2,7 @@ ARG PHP_VERSION
 
 FROM serversideup/php:${PHP_VERSION}-fpm-alpine AS builder
 USER root
-RUN apk add --no-cache libwebp-tools libjpeg-turbo-utils gifsicle optipng pngquant su-exec
+RUN apk add --no-cache libwebp-tools libjpeg-turbo-utils gifsicle optipng pngquant
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/bin/wp
@@ -21,7 +21,6 @@ COPY --from=builder /usr/bin/gifsicle /usr/bin/gifsicle
 COPY --from=builder /usr/bin/optipng /usr/bin/optipng
 COPY --from=builder /usr/bin/pngquant /usr/bin/pngquant
 COPY --from=builder /usr/bin/wp /usr/bin/wp
-COPY --from=builder /sbin/su-exec /sbin/su-exec
 COPY --from=builder2 /usr/local/cargo/bin/svgcleaner /usr/bin/svgcleaner
 RUN docker-php-serversideup-set-id www-data 1000:1000 && \
     docker-php-serversideup-set-file-permissions --owner 1000:1000 --service fpm
