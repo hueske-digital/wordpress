@@ -2,7 +2,7 @@ name: Build and Push Docker image
 
 env:
   OWN_IMAGE: ghcr.io/hueske-digital/wordpress
-  LAST_PHP_VERSION: 8.4
+  LAST_PHP_VERSION: 8.4 # Die letzte PHP-Version, die als latest gepusht wird
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        php_version: [8.3, 8.4]
+        php_version: [8.3, 8.4] # Die zu bauenden PHP-Versionen
 
     steps:
       - name: Checkout code
@@ -44,9 +44,14 @@ jobs:
           push: true
           context: ./build
           file: ./build/Dockerfile
-          tags: |
-            ${{ env.OWN_IMAGE }}:php${{ matrix.php_version }}
-            ${{ matrix.php_version == env.LAST_PHP_VERSION && env.OWN_IMAGE + ':latest' || '' }}
           platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ matrix.php_version }}
+          # Wichtig: Hier die Tags definieren
+          tags: |
+            # 1) Immer ein Tag phpX.Y
+            ${{ env.OWN_IMAGE }}:php${{ matrix.php_version }}
+            # 2) Nur wenn php_version == LAST_PHP_VERSION => latest-Tag
+            #    Dabei werden zwei Expressions hintereinander geschrieben.
+            #    Falls die Bedingung false ist, beide empty => kein Tag.
+            ${{ matrix.php_version == env.LAST_PHP_VERSION && env.OWN_IMAGE || '' }}${{ matrix.php_version == env.LAST_PHP_VERSION && ':latest' || '' }}
