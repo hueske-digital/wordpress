@@ -15,8 +15,8 @@ USER root
 RUN apk add --no-cache msmtp
 RUN install-php-extensions mysqli
 # Test if https://github.com/serversideup/docker-php/issues/516 is a 8.4 + imagick problem
-RUN if [ "$PHP_VERSION" = "8.3" ]; then install-php-extensions imagick; fi
-RUN if [ "$PHP_VERSION" = "8.4" ]; then install-php-extensions gd; fi
+RUN if [ "$(echo $PHP_VERSION | cut -d. -f1,2)" = "8.3" ]; then install-php-extensions imagick; fi
+RUN if [ "$(echo $PHP_VERSION | cut -d. -f1,2)" = "8.4" ]; then install-php-extensions gd; fi
 COPY --from=builder /usr/bin/cwebp /usr/bin/cwebp
 COPY --from=builder /usr/bin/jpegtran /usr/bin/jpegtran
 COPY --from=builder /usr/bin/gifsicle /usr/bin/gifsicle
