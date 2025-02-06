@@ -14,7 +14,8 @@ FROM serversideup/php:${PHP_VERSION}-fpm-alpine
 USER root
 RUN apk add --no-cache msmtp
 RUN install-php-extensions mysqli
-RUN install-php-extensions imagick
+# Test if https://github.com/serversideup/docker-php/issues/516 is a 8.4 + imagick problem
+RUN if [ "$PHP_VERSION" = "8.3" ]; then install-php-extensions imagick; fi
 COPY --from=builder /usr/bin/cwebp /usr/bin/cwebp
 COPY --from=builder /usr/bin/jpegtran /usr/bin/jpegtran
 COPY --from=builder /usr/bin/gifsicle /usr/bin/gifsicle
