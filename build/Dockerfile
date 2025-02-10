@@ -5,11 +5,13 @@ RUN cargo install svgcleaner
 
 FROM serversideup/php:${PHP_VERSION}-fpm-alpine
 USER root
-RUN apk add --no-cache msmtp libwebp-tools libjpeg-turbo-utils gifsicle optipng pngquant
+RUN apk add --no-cache msmtp libwebp-tools libjpeg-turbo-utils gifsicle optipng pngquant ghostscript
 RUN install-php-extensions mysqli
 RUN install-php-extensions intl
 RUN install-php-extensions exif
 RUN install-php-extensions gd
+RUN install-php-extensions bcmath
+RUN install-php-extensions zip
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/bin/wp

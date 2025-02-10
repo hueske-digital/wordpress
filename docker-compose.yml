@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/hueske-digital/wordpress:php8.3
+    image: ghcr.io/hueske-digital/wordpress:${PHP_VERSION:-latest}
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
