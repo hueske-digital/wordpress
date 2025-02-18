@@ -70,6 +70,8 @@ services:
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbrepair.schedule=${REPAIR_CRON_SCHEDULE:-0 0 6 * * *}"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbrepair.command=sh -c 'mariadb-check --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} --auto-repair --check --all-databases'"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=${BACKUP_CRON_SCHEDULE:-0 0 3 * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'mariadb-dump --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} ${DB_NAME:-wordpress} > /docker-entrypoint-initdb.d/backup.sql'"
     volumes:
