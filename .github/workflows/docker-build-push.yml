@@ -3,7 +3,6 @@ name: Build and Push Docker image
 env:
   PHP_VERSION: 8.3
   OWN_IMAGE: ghcr.io/hueske-digital/wordpress:latest
-  NGINX_IMAGE: ghcr.io/hueske-digital/wordpress:nginx
 
 on:
   push:
@@ -42,7 +41,7 @@ jobs:
           context: ./build
           file: ./build/Dockerfile
           tags: ${{ env.OWN_IMAGE }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
 
