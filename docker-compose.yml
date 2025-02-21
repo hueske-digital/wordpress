@@ -21,7 +21,7 @@ services:
       - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=${WORDPRESS_CRON_SCHEDULE:-0 */5 * * * *}"
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'su-exec 1000:1000 php wp-cron.php'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'gosu 1000:1000 php wp-cron.php'"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}update.schedule=${WORDPRESS_UPDATE_SCHEDULE:-0 0 20 * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}update.command=sh -c 'wp plugin update --all ${WORDPRESS_UPDATE_PLUGIN_PARAMS} && wp theme update --all ${WORDPRESS_UPDATE_THEME_PARAMS} && wp language plugin --all update && wp language theme --all update && wp language core update'"
     volumes:
