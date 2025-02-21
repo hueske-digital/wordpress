@@ -1,7 +1,7 @@
 ARG PHP_VERSION
 FROM wordpress:php${PHP_VERSION}-fpm as builder
 RUN apt-get update && apt-get install -y \
-    libwebp-tools \
+    libwebp \
     libjpeg-progs \
     gifsicle \
     optipng \
