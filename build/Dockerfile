@@ -1,9 +1,7 @@
-ARG PHP_VERSION
-
 FROM rust AS svgcleaner
 RUN cargo install svgcleaner
 
-FROM wordpress:php${PHP_VERSION}-fpm
+FROM wordpress:php-fpm
 RUN apt-get update && apt-get install -y \
     webp \
     libjpeg-turbo-progs \
