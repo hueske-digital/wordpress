@@ -21,3 +21,4 @@ RUN echo '#!/bin/sh' > /usr/local/bin/wp \
   && echo 'exec gosu 1000:1000 /usr/local/bin/wpcli "$@"' >> /usr/local/bin/wp \
   && chmod +x /usr/local/bin/wp
 COPY --from=svgcleaner /usr/local/cargo/bin/svgcleaner /usr/local/bin/svgcleaner
+COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/local/bin/gomplate
