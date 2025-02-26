@@ -16,6 +16,10 @@ services:
       - PHP_FPM_PM_MIN_SPARE_SERVERS=${PHP_FPM_PM_MIN_SPARE_SERVERS:-1}
       - PHP_FPM_PM_MAX_SPARE_SERVERS=${PHP_FPM_PM_MAX_SPARE_SERVERS:-3}
       - PHP_FPM_PM_MAX_REQUESTS=${PHP_FPM_PM_MAX_REQUESTS:-200}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_HOST=${SMTP_HOST:-mail.agenturserver.de}
+      - SMTP_FROM=${SMTP_FROM}
       - WP_CLI_CACHE_DIR=/tmp/.wp-cli/cache
     labels:
       - ofelia.restart=true
@@ -28,11 +32,13 @@ services:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
       - $PWD/conf/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
-      - $PWD/conf/msmtp/msmtprc:/etc/msmtprc
+      - $PWD/conf/msmtp/msmtprc:/etc/msmtprc.tmpl:ro
+    command: >
+      sh -c "gomplate -f /etc/msmtprc.tmpl -o /etc/msmtprc &&
+      exec php-fpm"
     networks:
       app_db:
       app_web:
-      proxy_mails:
     depends_on:
       - db
 
@@ -123,9 +129,6 @@ networks:
   default:
   app_db:
   app_web:
-  proxy_mails:
-    name: proxy_mails
-    external: true
   proxy_apps:
     name: proxy_apps
     external: true

@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     pngquant \
     curl \
     gosu \
+    msmtp \
   && rm -rf /var/lib/apt/lists/*
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
   && chmod +x wp-cli.phar \
