@@ -30,12 +30,7 @@ services:
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}update.command=sh -c 'wp plugin update --all ${WORDPRESS_UPDATE_PLUGIN_PARAMS} && wp theme update --all ${WORDPRESS_UPDATE_THEME_PARAMS} && wp language plugin --all update && wp language theme --all update && wp language core update'"
     volumes:
       - $PWD/data/web:/var/www/html
-      - $PWD/conf/php/custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
-      - $PWD/conf/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
-      - $PWD/conf/msmtp/msmtprc:/etc/msmtprc.tmpl:ro
-    command: >
-      sh -c "gomplate -f /etc/msmtprc.tmpl -o /etc/msmtprc &&
-      exec php-fpm"
+      - $PWD/conf/php/user.ini:/usr/local/etc/php/conf.d/zzzz-user.ini
     networks:
       app_db:
       app_web:
