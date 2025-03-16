@@ -39,6 +39,8 @@ RUN touch /etc/msmtprc && chown 1000:1000 /etc/msmtprc && \
       echo 'upload_max_filesize = 128M'; \
       echo 'post_max_size = 128M'; \
       echo 'sendmail_path = "/usr/bin/msmtp -t"'; \
+      echo 'opcache.enable = 1'; \
+      echo 'opcache.enable_cli = 1'; \
       echo 'opcache.jit = tracing'; \
       echo 'opcache.jit_buffer_size = 32M'; \
       echo 'opcache.memory_consumption = 256'; \
