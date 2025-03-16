@@ -7,3 +7,4 @@ data/db/*
 !data/db/README.md
 keys/*
 !keys/.gitkeep
+!conf/php/user.ini
