@@ -41,8 +41,6 @@ RUN touch /etc/msmtprc && chown 1000:1000 /etc/msmtprc && \
       echo 'sendmail_path = "/usr/bin/msmtp -t"'; \
       echo 'opcache.enable = 1'; \
       echo 'opcache.enable_cli = 1'; \
-      echo 'opcache.jit = tracing'; \
-      echo 'opcache.jit_buffer_size = 32M'; \
       echo 'opcache.memory_consumption = 256'; \
       echo 'opcache.interned_strings_buffer = 32'; \
       echo 'opcache.max_accelerated_files = 10000'; \
