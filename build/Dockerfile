@@ -5,6 +5,10 @@ RUN cargo install svgcleaner
 FROM serversideup/php:8-fpm
 USER root
 
+# Add repo for watchexec-cli
+RUN curl -fsSL https://apt.cli.rs/pubkey.asc | tee -a /usr/share/keyrings/rust-tools.asc && \
+    curl -fsSL https://apt.cli.rs/rust-tools.list | tee /etc/apt/sources.list.d/rust-tools.list
+
 # Install PHP extensions
 RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@3.8.0
 
@@ -20,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       msmtp \
       ghostscript \
       procps \
-      inotify-tools && \
+      watchexec-cli && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and configure WP-CLI
