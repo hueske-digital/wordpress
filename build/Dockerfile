@@ -6,7 +6,7 @@ FROM serversideup/php:8-fpm
 USER root
 
 # Install PHP extensions
-RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@3.8.0RC2
+RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@3.8.0
 
 # Combine apt-get update and package installation using BuildKit cache mounts
 RUN apt-get update && apt-get install -y --no-install-recommends \
