@@ -21,6 +21,7 @@ services:
       - SMTP_HOST=${SMTP_HOST:-mail.agenturserver.de}
       - SMTP_FROM=${SMTP_FROM}
       - WP_CLI_CACHE_DIR=/tmp/.wp-cli/cache
+      - WORDPRESS_DISABLE_NINJAFIREWALL=${WORDPRESS_DISABLE_NINJAFIREWALL:-false}
     labels:
       - ofelia.restart=true
       - ofelia.enabled=true

@@ -1,0 +1,42 @@
+<?php
+// Database settings
+define( 'DB_NAME',     getenv( 'WORDPRESS_DB_NAME' ) );
+define( 'DB_USER',     getenv( 'WORDPRESS_DB_USER' ) );
+define( 'DB_PASSWORD', getenv( 'WORDPRESS_DB_PASSWORD' ) );
+define( 'DB_HOST',     getenv( 'WORDPRESS_DB_HOST' ) );
+
+define( 'DB_CHARSET', getenv('WORDPRESS_DB_CHARSET') ?: 'utf8' );
+define( 'DB_COLLATE', getenv('WORDPRESS_DB_COLLATE') ?: '' );
+
+$table_prefix = getenv( 'WORDPRESS_TABLE_PREFIX' ) ?: 'wp_';
+
+// Security & Performance
+define( 'WP_ALLOW_MULTISITE', getenv('WP_ALLOW_MULTISITE') ?: false );
+define( 'DISALLOW_FILE_EDIT', getenv('DISALLOW_FILE_EDIT') ?: true );
+define( 'CONCATENATE_SCRIPTS', getenv('CONCATENATE_SCRIPTS') ?: false );
+define( 'WP_POST_REVISIONS', getenv('WP_POST_REVISIONS') ?: 5 );
+define( 'CORE_UPGRADE_SKIP_NEW_BUNDLED', getenv('CORE_UPGRADE_SKIP_NEW_BUNDLED') ?: true );
+define( 'EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE', getenv('EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE') ?: true );
+define( 'DISABLE_WP_CRON', getenv('DISABLE_WP_CRON') ?: true );
+
+// Debugging
+define( 'WP_DEBUG', getenv('WP_DEBUG') ?: false );
+define( 'WP_DEBUG_DISPLAY', getenv('WP_DEBUG_DISPLAY') ?: false );
+
+// Reverse Proxy via HTTPS
+if (
+    isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) &&
+    strpos( $_SERVER['HTTP_X_FORWARDED_PROTO'], 'https' ) !== false
+) {
+    $_SERVER['HTTPS'] = 'on';
+}
+
+// Security Keys
+{{ (ds "salts").content }}
+
+// WordPress Environment
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
+}
+
+require_once ABSPATH . 'wp-settings.php';

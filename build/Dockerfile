@@ -65,6 +65,9 @@ COPY --from=svgcleaner /usr/local/cargo/bin/svgcleaner /usr/local/bin/svgcleaner
 COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/local/bin/gomplate
 COPY start.sh /usr/local/bin/start.sh
 COPY msmtprc.tmpl /etc/msmtprc.tmpl
+COPY wp-config.tmpl /etc/wp-config.tmpl
+COPY htninja.tmpl /etc/htninja.tmpl
+COPY userini.tmpl /etc/userini.tmpl
 
 # Set file permissions and user settings
 RUN docker-php-serversideup-set-id www-data 1000:1000 && \
