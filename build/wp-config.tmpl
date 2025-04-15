@@ -19,7 +19,7 @@ define( 'CORE_UPGRADE_SKIP_NEW_BUNDLED', getenv('CORE_UPGRADE_SKIP_NEW_BUNDLED')
 define( 'EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE', getenv('EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE') ?: true );
 define( 'DISABLE_WP_CRON', getenv('DISABLE_WP_CRON') ?: true );
 
-{{ (ds "salts") -}}
+{{ (ds "salts") }}
 
 // Debugging
 define( 'WP_DEBUG', getenv('WP_DEBUG') ?: false );
