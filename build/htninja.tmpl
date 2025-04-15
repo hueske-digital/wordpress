@@ -1,4 +1,4 @@
-{{- if ne (getenv "WORDPRESS_DISABLE_NINJAFIREWALL") "true" }}
+{{- if ne (getenv "WORDPRESS_DISABLE_NINJAFIREWALL") "true" -}}
 <?php
 $GLOBALS['nfw_mysqli'] = new mysqli(
     getenv('WORDPRESS_DB_HOST'),
@@ -7,4 +7,4 @@ $GLOBALS['nfw_mysqli'] = new mysqli(
     getenv('WORDPRESS_DB_NAME')
 );
 $GLOBALS['nfw_table_prefix'] = getenv('WORDPRESS_TABLE_PREFIX');
-{{- end }}
+{{- end -}}

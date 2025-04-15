@@ -23,6 +23,9 @@ define( 'DISABLE_WP_CRON', getenv('DISABLE_WP_CRON') ?: true );
 define( 'WP_DEBUG', getenv('WP_DEBUG') ?: false );
 define( 'WP_DEBUG_DISPLAY', getenv('WP_DEBUG_DISPLAY') ?: false );
 
+// Security Keys
+{{- (ds "salts") }}
+
 // Reverse Proxy via HTTPS
 if (
     isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) &&
@@ -30,9 +33,6 @@ if (
 ) {
     $_SERVER['HTTPS'] = 'on';
 }
-
-// Security Keys
-{{ (ds "salts") }}
 
 // WordPress Environment
 if ( ! defined( 'ABSPATH' ) ) {

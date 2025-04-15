@@ -1,5 +1,5 @@
-{{- if ne (getenv "WORDPRESS_DISABLE_NINJAFIREWALL") "true" }}
+{{- if ne (getenv "WORDPRESS_DISABLE_NINJAFIREWALL") "true" -}}
 ; BEGIN NinjaFirewall
 auto_prepend_file = "/var/www/html/wp-content/nfwlog/ninjafirewall.php"
 ; END NinjaFirewall
-{{- end }}
+{{- end -}}
