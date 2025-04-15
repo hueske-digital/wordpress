@@ -19,12 +19,11 @@ define( 'CORE_UPGRADE_SKIP_NEW_BUNDLED', getenv('CORE_UPGRADE_SKIP_NEW_BUNDLED')
 define( 'EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE', getenv('EWWW_IMAGE_OPTIMIZER_SKIP_BUNDLE') ?: true );
 define( 'DISABLE_WP_CRON', getenv('DISABLE_WP_CRON') ?: true );
 
+{{ (ds "salts") -}}
+
 // Debugging
 define( 'WP_DEBUG', getenv('WP_DEBUG') ?: false );
 define( 'WP_DEBUG_DISPLAY', getenv('WP_DEBUG_DISPLAY') ?: false );
-
-// Security Keys
-{{- (ds "salts") }}
 
 // Reverse Proxy via HTTPS
 if (
