@@ -40,5 +40,10 @@ jobs:
           tags: ${{ env.OWN_IMAGE }}
           platforms: linux/arm64
 
-      - name: Do not automatically disable workflow execution
-        uses: gautamkrishnar/keepalive-workflow@v2
+  keep-active:
+    uses: hueske-digital/actions/.github/workflows/keep-active.yml@main
+    with:
+      threshold_days: 50
+      commit_message: "chore: keep repo alive"
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
