@@ -41,6 +41,8 @@ jobs:
           platforms: linux/arm64
 
   keep-active:
+    permissions:
+      contents: write
     uses: hueske-digital/actions/.github/workflows/keep-active.yml@main
     with:
       threshold_days: 50
