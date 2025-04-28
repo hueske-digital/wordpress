@@ -45,5 +45,3 @@ jobs:
     with:
       threshold_days: 50
       commit_message: "chore: keep repo alive"
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
