@@ -10,7 +10,7 @@ RUN curl -fsSL https://apt.cli.rs/pubkey.asc | tee -a /usr/share/keyrings/rust-t
     curl -fsSL https://apt.cli.rs/rust-tools.list | tee /etc/apt/sources.list.d/rust-tools.list
 
 # Install PHP extensions
-RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@3.8.0
+RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@3.8.0 gmp
 
 # Combine apt-get update and package installation using BuildKit cache mounts
 RUN apt-get update && apt-get install -y --no-install-recommends \
