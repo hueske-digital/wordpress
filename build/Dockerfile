@@ -2,34 +2,22 @@
 FROM rust:alpine AS svgcleaner
 RUN cargo install svgcleaner
 
-# Stage 2: Download external tools
+# Stage 2: Build watchexec from source
+FROM rust:bookworm AS watchexec-builder
+RUN cargo install watchexec-cli
+
+# Stage 3: Download other tools
 FROM alpine:latest AS downloader
-RUN apk add --no-cache curl jq tar xz
+RUN apk add --no-cache curl
 
-ARG TARGETARCH
 WORKDIR /downloads
-
-# Download watchexec
-RUN ARCH=$(case "$TARGETARCH" in \
-      "amd64") echo "x86_64" ;; \
-      "arm64") echo "aarch64" ;; \
-      "arm/v7") echo "armv7" ;; \
-      *) echo "$TARGETARCH" ;; \
-    esac) && \
-    echo "Downloading watchexec for architecture: $ARCH" && \
-    WATCHEXEC_VERSION=$(curl -s https://api.github.com/repos/watchexec/watchexec/releases/latest | jq -r '.tag_name' | sed 's/^v//') && \
-    echo "Latest watchexec version: $WATCHEXEC_VERSION" && \
-    curl -L "https://github.com/watchexec/watchexec/releases/download/v${WATCHEXEC_VERSION}/watchexec-${WATCHEXEC_VERSION}-${ARCH}-unknown-linux-gnu.tar.xz" -o watchexec.tar.xz && \
-    tar -xf watchexec.tar.xz && \
-    mv watchexec-${WATCHEXEC_VERSION}-${ARCH}-unknown-linux-gnu/watchexec /downloads/watchexec && \
-    chmod +x /downloads/watchexec
 
 # Download WP-CLI
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /downloads/wp-cli.phar
 
-# Stage 3: Main application
+# Stage 4: Main application
 FROM serversideup/php:8-fpm
 USER root
 
@@ -47,13 +35,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       gosu \
       msmtp \
       ghostscript \
-      procps && \
+      procps \
+      libc6 \
+      libgcc-s1 \
+      libstdc++6 && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy binaries from previous stages
 COPY --from=svgcleaner /usr/local/cargo/bin/svgcleaner /usr/local/bin/svgcleaner
 COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/local/bin/gomplate
-COPY --from=downloader /downloads/watchexec /usr/local/bin/watchexec
+COPY --from=watchexec-builder /usr/local/cargo/bin/watchexec /usr/local/bin/watchexec
 COPY --from=downloader /downloads/wp-cli.phar /usr/local/bin/wpcli
 
 # Set up WP-CLI wrapper

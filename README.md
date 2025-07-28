@@ -88,7 +88,7 @@ post_max_size = 256M
 - **web**: Nginx reverse proxy
   - Image: `nginxinc/nginx-unprivileged:mainline-alpine-perl`
   - Features: 8G firewall, enhanced FastCGI caching, static file optimization, unprivileged mode
-  - Cache: 1GB cache size, 12-hour cache validity, cache status headers
+  - Cache: 100MB cache size, 12-hour cache validity, cache status headers
 
 - **db**: MariaDB database
   - Image: `mariadb:latest`
