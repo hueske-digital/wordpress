@@ -6,7 +6,7 @@ A production-ready Docker setup for WordPress with PHP-FPM, Nginx, MariaDB, and 
 
 - **WordPress**: Latest version with customizable database and table prefix
 - **PHP-FPM**: Performance-optimized with auto-reload on configuration changes
-- **Nginx**: Unprivileged setup with 8G firewall and full-page caching support
+- **Nginx**: Unprivileged setup with 8G firewall, enhanced caching, and static file optimization
 - **MariaDB**: Tunable database with automatic backups and maintenance
 - **WP-CLI**: Pre-installed for command-line WordPress management
 - **Image Optimization**: Includes svgcleaner, optipng, pngquant, jpegoptim, and more
@@ -14,6 +14,7 @@ A production-ready Docker setup for WordPress with PHP-FPM, Nginx, MariaDB, and 
 - **Development Tools**: Adminer for database management (optional)
 - **Deployment**: SSH server with rsync support (optional)
 - **Email**: SMTP configuration via msmtp
+- **Makefile**: Simplified Docker commands for common tasks
 
 ## Quick Start
 
@@ -37,7 +38,8 @@ A production-ready Docker setup for WordPress with PHP-FPM, Nginx, MariaDB, and 
 
 4. **Start the services**
    ```bash
-   docker compose up -d
+   make up
+   # Or without Makefile: docker compose up -d
    ```
 
 5. **Access WordPress**
@@ -85,7 +87,8 @@ post_max_size = 256M
 
 - **web**: Nginx reverse proxy
   - Image: `nginxinc/nginx-unprivileged:mainline-alpine-perl`
-  - Features: 8G firewall, full-page caching, unprivileged mode
+  - Features: 8G firewall, enhanced FastCGI caching, static file optimization, unprivileged mode
+  - Cache: 1GB cache size, 12-hour cache validity, cache status headers
 
 - **db**: MariaDB database
   - Image: `mariadb:latest`
@@ -107,39 +110,59 @@ Enable with Docker Compose profiles:
 
 ## Usage
 
+### Makefile Commands
+
+The project includes a Makefile for common tasks:
+
+```bash
+make help         # Show all available commands
+make up           # Start all services
+make down         # Stop all services
+make restart      # Restart all services
+make logs         # Follow logs from all services
+make shell        # Open shell in WordPress container
+make wp cmd='plugin list'  # Run WP-CLI commands
+make backup       # Create database backup
+make restore file=backup.sql  # Restore database
+make update-all   # Update all plugins, themes, and languages
+make clean        # Remove all containers, volumes and images
+```
+
 ### WP-CLI Commands
 
 ```bash
-# List plugins
+# Using Makefile
+make wp cmd='plugin list'
+make wp cmd='theme install twentytwentyfour --activate'
+
+# Using Docker directly
 docker compose exec app wp plugin list
-
-# Update all plugins
 docker compose exec app wp plugin update --all
-
-# Install a theme
 docker compose exec app wp theme install twentytwentyfour --activate
-
-# Check cron events
 docker compose exec app wp cron event list
 ```
 
 ### Database Management
 
 ```bash
-# Access MariaDB CLI
-docker compose exec db mariadb -u wordpress -p
+# Using Makefile
+make backup                    # Creates timestamped backup in backups/
+make restore file=backups/backup-20240101-120000.sql
 
-# Manual backup
+# Using Docker directly
+docker compose exec db mariadb -u wordpress -p
 docker compose exec db sh -c 'mariadb-dump -u wordpress -p wordpress > /docker-entrypoint-initdb.d/manual-backup.sql'
 ```
 
 ### Logs
 
 ```bash
-# View all logs
-docker compose logs -f
+# Using Makefile
+make logs         # All services
+make dev-logs     # Only app and web services
 
-# Specific service logs
+# Using Docker directly
+docker compose logs -f
 docker compose logs -f app    # PHP-FPM
 docker compose logs -f web    # Nginx
 docker compose logs -f db     # MariaDB
@@ -172,6 +195,7 @@ The following tasks run automatically via Ofelia:
 │   └── db/             # Database backups
 ├── keys/               # SSH public keys
 ├── docker-compose.yml  # Service definitions
+├── Makefile            # Common Docker commands
 └── .env.example        # Environment template
 ```
 
@@ -186,14 +210,21 @@ The following tasks run automatically via Ofelia:
 
 ## Building Custom Image
 
-To build the WordPress image locally:
+The WordPress image uses a multi-stage build for optimization:
+- Stage 1: Builds svgcleaner from Rust
+- Stage 2: Downloads watchexec and WP-CLI in a minimal Alpine container
+- Stage 3: Assembles the final image with all components
+
+To build locally:
 
 ```bash
+make build
+# Or manually:
 cd build
-docker build -t my-wordpress .
+docker build -t ghcr.io/hueske-digital/wordpress:latest .
 ```
 
-Update `docker-compose.yml` to use your custom image.
+The image automatically detects the target architecture (amd64/arm64) and downloads the appropriate watchexec binary.
 
 ## Deployment
 
