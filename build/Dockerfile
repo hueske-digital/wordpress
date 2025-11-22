@@ -22,7 +22,7 @@ FROM serversideup/php:8-fpm
 USER root
 
 # Install PHP extensions first (changes less frequently)
-RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@3.8.0 gmp
+RUN install-php-extensions gd bcmath exif intl mysqli zip imagick imagick/imagick@14880bd7ec2042fb3272772542992b16536522b8 gmp
 
 # Install system packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
