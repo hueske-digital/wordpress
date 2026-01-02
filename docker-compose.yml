@@ -45,6 +45,18 @@ services:
       - TZ=Europe/Berlin
       - COMPOSE_PROJECT_NAME
       - PERL5LIB=${PERL5LIB:-/usr/lib/perl5/vendor_perl/aarch64-linux-thread-multi}
+      - CADDY_DOMAIN=${CADDY_DOMAIN}
+      - CADDY_TYPE=${CADDY_TYPE:-external}
+      - CADDY_PORT=${CADDY_PORT:-80}
+      - CADDY_TLS=${CADDY_TLS:-true}
+      - CADDY_COMPRESSION=${CADDY_COMPRESSION:-true}
+      - CADDY_HEADER=${CADDY_HEADER:-true}
+      - CADDY_PERFORMANCE=${CADDY_PERFORMANCE:-true}
+      - CADDY_SECURITY=${CADDY_SECURITY:-true}
+      - CADDY_SEO=${CADDY_SEO:-true}
+      - CADDY_WWW_REDIRECT=${CADDY_WWW_REDIRECT:-true}
+      - CADDY_WORDPRESS=${CADDY_WORDPRESS:-true}
+      - CADDY_LOGGING=${CADDY_LOGGING:-false}
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/nginx/purge.pm:${PERL5LIB:-/usr/lib/perl5/vendor_perl/aarch64-linux-thread-multi}/purge.pm
@@ -54,7 +66,7 @@ services:
       - $PWD/conf/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
     networks:
       app_web:
-      proxy_apps:
+      caddy:
     depends_on:
       - app
 
@@ -81,17 +93,6 @@ services:
       - db_data:/var/lib/mysql
     networks:
       app_db:
-
-  adminer:
-    image: adminer
-    restart: unless-stopped
-    environment:
-      - ADMINER_DEFAULT_SERVER=db
-    networks:
-      app_db:
-      proxy_apps:
-    profiles:
-      - adminer
 
   ssh:
     image: lscr.io/linuxserver/openssh-server:latest
@@ -125,6 +126,4 @@ networks:
   default:
   app_db:
   app_web:
-  proxy_apps:
-    name: proxy_apps
-    external: true
+  caddy:
