@@ -26,9 +26,11 @@ services:
       - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=${WORDPRESS_CRON_SCHEDULE:-0 */5 * * * *}"
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=php wp-cron.php"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'gosu 1000:1000 php wp-cron.php'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.user=root"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}update.schedule=${WORDPRESS_UPDATE_SCHEDULE:-0 0 20 * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}update.command=sh -c '{ [ -z \"$$(wp plugin list --update=available --field=name)\" ] || wp plugin update --all ${WORDPRESS_UPDATE_PLUGIN_PARAMS}; } && { [ -z \"$$(wp theme list --update=available --field=name)\" ] || wp theme update --all ${WORDPRESS_UPDATE_THEME_PARAMS}; } && wp language plugin --all update && wp language theme --all update && wp language core update'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}update.user=root"
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/php/user.ini:/usr/local/etc/php/conf.d/zzzz-user.ini
