@@ -47,9 +47,17 @@ COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/local/bin/gomplate
 COPY --from=watchexec-builder /usr/local/cargo/bin/watchexec /usr/local/bin/watchexec
 COPY --from=downloader /downloads/wp-cli.phar /usr/local/bin/wpcli
 
-# Set up WP-CLI wrapper
-RUN echo '#!/bin/sh' > /usr/local/bin/wp && \
-    echo 'exec gosu 1000:1000 /usr/local/bin/wpcli "$@"' >> /usr/local/bin/wp && \
+# Set up WP-CLI wrapper.
+# gosu only when invoked as root (e.g. a manual `docker exec -u 0`) so created
+# files end up owned by 1000:1000. When already running as a non-root user
+# (the normal case: container user 1000, ofelia exec), run wpcli directly --
+# gosu cannot drop privileges without root and would fail with
+# "operation not permitted".
+RUN printf '%s\n' \
+      '#!/bin/sh' \
+      '[ "$(id -u)" = 0 ] && exec gosu 1000:1000 /usr/local/bin/wpcli "$@"' \
+      'exec /usr/local/bin/wpcli "$@"' \
+      > /usr/local/bin/wp && \
     chmod +x /usr/local/bin/wp
 
 # Configure msmtp
