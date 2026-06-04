@@ -23,7 +23,6 @@ services:
       - WP_CLI_CACHE_DIR=/tmp/.wp-cli/cache
       - WORDPRESS_DISABLE_NINJAFIREWALL=${WORDPRESS_DISABLE_NINJAFIREWALL:-false}
     labels:
-      - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=${WORDPRESS_CRON_SCHEDULE:-0 */5 * * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.command=sh -c 'gosu 1000:1000 php wp-cron.php'"
@@ -85,7 +84,6 @@ services:
       - MARIADB_PASSWORD=${DB_PASSWORD:-wordpress}
       - MARIADB_AUTO_UPGRADE=1
     labels:
-      - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbrepair.schedule=${REPAIR_CRON_SCHEDULE:-0 0 6 * * *}"
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbrepair.command=sh -c 'mariadb-check --user=${DB_USER:-wordpress} --password=${DB_PASSWORD:-wordpress} --auto-repair --check --all-databases'"
