@@ -22,6 +22,12 @@ services:
       - SMTP_FROM=${SMTP_FROM}
       - WP_CLI_CACHE_DIR=/tmp/.wp-cli/cache
       - WORDPRESS_DISABLE_NINJAFIREWALL=${WORDPRESS_DISABLE_NINJAFIREWALL:-false}
+    deploy:
+      resources:
+        limits:
+          cpus: "${LIMIT_APP_CPUS:-2}"
+          memory: ${LIMIT_APP_MEM:-1G}
+          pids: ${LIMIT_APP_PIDS:-256}
     labels:
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}cron.schedule=${WORDPRESS_CRON_SCHEDULE:-0 */5 * * * *}"
@@ -57,6 +63,12 @@ services:
       - CADDY_WWW_REDIRECT=${CADDY_WWW_REDIRECT:-true}
       - CADDY_WORDPRESS=${CADDY_WORDPRESS:-true}
       - CADDY_LOGGING=${CADDY_LOGGING:-false}
+    deploy:
+      resources:
+        limits:
+          cpus: "${LIMIT_WEB_CPUS:-1}"
+          memory: ${LIMIT_WEB_MEM:-192M}
+          pids: ${LIMIT_WEB_PIDS:-128}
     volumes:
       - $PWD/data/web:/var/www/html
       - $PWD/conf/nginx/purge.pm:${PERL5LIB:-/usr/lib/perl5/vendor_perl/aarch64-linux-thread-multi}/purge.pm
@@ -81,6 +93,12 @@ services:
       - MARIADB_USER=${DB_USER:-wordpress}
       - MARIADB_PASSWORD=${DB_PASSWORD:-wordpress}
       - MARIADB_AUTO_UPGRADE=1
+    deploy:
+      resources:
+        limits:
+          cpus: "${LIMIT_DB_CPUS:-1.5}"
+          memory: ${LIMIT_DB_MEM:-768M}
+          pids: ${LIMIT_DB_PIDS:-256}
     labels:
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbrepair.schedule=${REPAIR_CRON_SCHEDULE:-0 0 6 * * *}"
