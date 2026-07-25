@@ -3,6 +3,7 @@
 .DS_Store
 data/web/*
 data/db/*
+backups/
 !data/web/README.md
 !data/db/README.md
 keys/*

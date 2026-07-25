@@ -2,9 +2,15 @@ perl_modules ${PERL5LIB};
 perl_require purge.pm;
 
 # FastCGI Cache Configuration
-fastcgi_cache_path /etc/nginx/cache levels=1:2 keys_zone=WORDPRESS:16m max_size=512m inactive=12h use_temp_path=off;
+# Cache liegt unter /tmp (wie die uebrigen temp_paths), damit der unprivilegierte
+# nginx-User das Verzeichnis fuer den Purge umbenennen und neu anlegen kann.
+fastcgi_cache_path /tmp/cache levels=1:2 keys_zone=WORDPRESS:16m max_size=512m inactive=12h use_temp_path=off;
 fastcgi_cache_key "$scheme$request_method$host$request_uri";
-fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
+# Set-Cookie bewusst NICHT ignorieren: sonst landen Antworten, die gerade erst
+# eine Session eroeffnen (WooCommerce-Cart, Kommentar-Autor), im Cache und
+# werden an fremde Clients ausgeliefert. Die $http_cookie-Regel unten greift
+# erst, wenn das Cookie bereits im Request steht.
+fastcgi_ignore_headers Cache-Control Expires;
 
 server {
     listen 80;
@@ -15,7 +21,13 @@ server {
     if ($request_method = POST) {
         set $skip_cache 1;
     }
-    if ($query_string != "") {
+    if ($skip_cache_qs) {
+        set $skip_cache 1;
+    }
+
+    # Authentifizierte Requests ohne Cookie (REST mit Application Password,
+    # Basic Auth) wuerden sonst durch alle Cookie-Regeln unten durchrutschen.
+    if ($http_authorization != "") {
         set $skip_cache 1;
     }
 
@@ -67,12 +79,13 @@ server {
         fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_cache WORDPRESS;
         fastcgi_cache_background_update on;
-        fastcgi_cache_valid 200 301 302 12h;
+        fastcgi_cache_valid 200 12h;
+        fastcgi_cache_valid 301 302 10m;
         fastcgi_cache_use_stale error timeout updating invalid_header http_500 http_503;
         fastcgi_cache_min_uses 1;
         fastcgi_cache_lock on;
         fastcgi_cache_bypass $skip_cache;
-        fastcgi_no_cache $skip_cache;
+        fastcgi_no_cache $skip_cache $upstream_http_set_cookie;
         add_header X-FastCGI-Cache $upstream_cache_status;
         fastcgi_buffers 16 16k;
         fastcgi_buffer_size 32k;

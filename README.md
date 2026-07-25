@@ -11,7 +11,6 @@ A production-ready Docker setup for WordPress with PHP-FPM, Nginx, MariaDB, and 
 - **WP-CLI**: Pre-installed for command-line WordPress management
 - **Image Optimization**: Includes svgcleaner, optipng, pngquant, jpegoptim, and more
 - **Automated Tasks**: Cron jobs via Ofelia for updates, backups, and maintenance
-- **Development Tools**: Adminer for database management (optional)
 - **Deployment**: SSH server with rsync support (optional)
 - **Email**: SMTP configuration via msmtp
 - **Makefile**: Simplified Docker commands for common tasks
@@ -97,11 +96,6 @@ post_max_size = 256M
 ### Optional Services
 
 Enable with Docker Compose profiles:
-
-- **adminer**: Database management UI
-  ```bash
-  docker compose --profile adminer up -d
-  ```
 
 - **ssh**: SSH server for deployments
   ```bash

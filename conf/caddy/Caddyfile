@@ -14,8 +14,11 @@ https://example.com {
     }
 
     header {
+        # Kein globales Cache-Control: es wuerde die von WordPress gesetzten
+        # private/no-store-Header auf eingeloggten Seiten durch "public" ersetzen.
+        # Dynamische Antworten laufen unveraendert durch, nur die statischen
+        # Matcher unten setzen bewusst lange Cache-Zeiten.
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        Cache-Control "public, max-age=0, must-revalidate"
         X-Content-Type-Options nosniff
         X-XSS-Protection "1; mode=block"
         X-Frame-Options "SAMEORIGIN"

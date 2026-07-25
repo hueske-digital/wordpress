@@ -6,8 +6,11 @@ https://*.sites.hueske.digital {
     }
 
     header {
+        # Kein globales Cache-Control: es wuerde die von WordPress gesetzten
+        # private/no-store-Header auf eingeloggten Seiten durch "public" ersetzen.
+        # Der frueher hier gegensteuernde @noCache-Matcher war extension-basiert
+        # und griff bei Pretty Permalinks (/my-account/) gar nicht.
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        Cache-Control "public, max-age=3600, must-revalidate"
         X-Content-Type-Options nosniff
         X-XSS-Protection "1; mode=block"
         X-Frame-Options "SAMEORIGIN"
@@ -29,13 +32,6 @@ https://*.sites.hueske.digital {
 
     encode zstd gzip
 
-    @noCache {
-        path *.html *.php *.json *.xml *.rss *.atom
-    }
-    header @noCache {
-        Cache-Control "public, max-age=0, must-revalidate"
-    }
-
     @longCache {
         path *.css *.js *.png *.jpg *.jpeg *.gif *.heic *.heif *.ico *.svg *.woff *.woff2 *.ttf *.otf *.mp4 *.mov *.webm *.eot *.jxl *.avif *.webp *.bmp *.m4v *.tif *.tiff *.mp3 *.m4a
     }
@@ -52,11 +48,5 @@ https://*.sites.hueske.digital {
 
     reverse_proxy {http.request.host.labels.3}-web-1:80 {
         header_up X-Real-IP {remote_host}
-    }
-
-    handle_path /adminer* {
-        reverse_proxy {http.request.host.labels.3}-adminer-1:8080 {
-            header_up X-Real-IP {remote_host}
-        }
     }
 }

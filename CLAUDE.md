@@ -11,7 +11,6 @@ This is a Dockerized WordPress environment with PHP-FPM, Nginx, MariaDB, and add
 ### Starting the Environment
 ```bash
 docker compose up -d                    # Start all services
-docker compose up -d --profile adminer  # Include Adminer database tool
 docker compose up -d --profile ssh      # Include SSH server for deployments
 ```
 
@@ -58,7 +57,6 @@ docker build -t wordpress-custom ./build/  # Build image locally
   - Configurable performance settings via environment variables
   - Automatic backups via Ofelia cron jobs
   
-- **adminer**: Database management UI (optional profile)
 - **ssh**: OpenSSH server for deployments (optional profile)
 
 ### Directory Structure

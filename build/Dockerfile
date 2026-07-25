@@ -66,6 +66,7 @@ RUN touch /etc/msmtprc && chown 1000:1000 /etc/msmtprc
 # Configure PHP settings
 RUN { \
       echo 'memory_limit = 256M'; \
+      echo 'expose_php = Off'; \
       echo 'cgi.fix_pathinfo = 0'; \
       echo 'upload_max_filesize = 128M'; \
       echo 'post_max_size = 128M'; \

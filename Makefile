@@ -87,13 +87,7 @@ push: build
 	docker push ghcr.io/hueske-digital/wordpress:latest
 
 # Development shortcuts
-.PHONY: dev-up dev-down dev-logs
-
-dev-up:
-	docker compose --profile adminer up -d
-
-dev-down:
-	docker compose --profile adminer down
+.PHONY: dev-logs
 
 dev-logs:
 	docker compose logs -f app web
